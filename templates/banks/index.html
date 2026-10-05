@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Банки України — Banku.ua{% endblock %}
+
+{% block extra_style %}
+<style>
+  .hero { text-align: center; margin-bottom: 32px; }
+  .hero h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .hero p { font-size: 0.9rem; color: #555; }
+
+  .bank-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .bank-list li a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #161616;
+    border: 1px solid #222;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #e8e8e8;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  }
+  .bank-list li a:hover {
+    background: #1c1c1c;
+    border-color: #7c6fff;
+    transform: translateY(-1px);
+  }
+
+  .b-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    background: #1e1e1e;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid #2a2a2a;
+  }
+  .b-info { flex: 1; min-width: 0; }
+  .b-name {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .b-desc {
+    display: block;
+    font-size: 0.8rem;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .b-arrow {
+    font-size: 1.1rem;
+    color: #333;
+    flex-shrink: 0;
+    transition: color 0.15s, transform 0.15s;
+  }
+  .bank-list li a:hover .b-arrow {
+    color: #7c6fff;
+    transform: translateX(3px);
+  }
+
+  .empty { color: #555; padding: 24px 0; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="hero">
+    <h2>Обери свій банк</h2>
+    <p>Клікни — побачиш умови акції та посилання для переходу</p>
+  </div>
+
+  <ul class="bank-list">
+    {% for bank in banks %}
+    <li>
+      <a href="{% url 'bank_detail' bank.pk %}">
+        <div class="b-icon">{{ bank.icon }}</div>
+        <div class="b-info">
+          <span class="b-name">{{ bank.name }}</span>
+          {% if bank.description %}<span class="b-desc">{{ bank.description }}</span>{% endif %}
+        </div>
+        <span class="b-arrow">›</span>
+      </a>
+    </li>
+    {% empty %}
+    <li class="empty">Банки ще не додані. Зайди в <a href="/admin/">адмінку</a> і додай.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
